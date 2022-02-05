@@ -1,12 +1,10 @@
-package com.example.querolanche.jpa;
+package com.ruandev.querolanche.jpa;
 
-import com.example.querolanche.QuerolancheApiApplication;
-import com.example.querolanche.domain.model.Cozinha;
+import com.ruandev.querolanche.QuerolancheApiApplication;
+import com.ruandev.querolanche.domain.model.Cozinha;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
-
-import java.util.List;
 
 public class InclusaoCozinhaMain {
 
