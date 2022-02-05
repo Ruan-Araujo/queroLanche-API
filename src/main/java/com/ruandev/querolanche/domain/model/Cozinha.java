@@ -1,4 +1,4 @@
-package com.example.querolanche.domain.model;
+package com.ruandev.querolanche.domain.model;
 
 import javax.persistence.*;
 import java.util.Objects;

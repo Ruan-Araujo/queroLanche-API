@@ -1,4 +1,4 @@
-package com.example.querolanche;
+package com.ruandev.querolanche;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

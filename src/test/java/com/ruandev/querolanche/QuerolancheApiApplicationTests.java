@@ -1,4 +1,4 @@
-package com.example.querolanche;
+package com.ruandev.querolanche;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
-package com.example.querolanche.jpa;
+package com.ruandev.querolanche.jpa;
 
-import com.example.querolanche.domain.model.Cozinha;
+import com.ruandev.querolanche.domain.model.Cozinha;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
