@@ -2,6 +2,7 @@ package com.ruandev.querolanche.jpa;
 
 import com.ruandev.querolanche.QuerolancheApiApplication;
 import com.ruandev.querolanche.domain.model.Cozinha;
+import com.ruandev.querolanche.domain.repository.CozinhaRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +16,7 @@ public class InclusaoCozinhaMain {
                 .web(WebApplicationType.NONE)
                 .run(args);
 
-        CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+        CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
 
         Cozinha cozinha1  = new Cozinha();
         cozinha1.setNome("Italiana");
@@ -23,8 +24,8 @@ public class InclusaoCozinhaMain {
         Cozinha cozinha2 = new Cozinha();
         cozinha2.setNome("Japonesa");
 
-        cozinha1 = cadastroCozinha.salvar(cozinha1);
-        cozinha2 = cadastroCozinha.salvar(cozinha2);
+        cozinha1 = cozinhaRepository.adicionar(cozinha1);
+        cozinha2 = cozinhaRepository.adicionar(cozinha2);
 
         System.out.printf("%d - %s\n", cozinha1.getId(), cozinha1.getNome());
         System.out.printf("%d - %s\n", cozinha2.getId(), cozinha2.getNome());

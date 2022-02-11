@@ -2,6 +2,7 @@ package com.ruandev.querolanche.jpa;
 
 import com.ruandev.querolanche.QuerolancheApiApplication;
 import com.ruandev.querolanche.domain.model.Cozinha;
+import com.ruandev.querolanche.domain.repository.CozinhaRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,11 +18,11 @@ public class ConsultaCozinhaMain {
                 .web(WebApplicationType.NONE)
                 .run(args);
 
-        CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+        CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
 
-        List<Cozinha> cozinhas = cadastroCozinha.listar();
+        List<Cozinha> todasCozinhas = cozinhas.todas();
 
-        cozinhas.forEach(cozinha -> System.out.println(cozinha.getNome()));
+        todasCozinhas.forEach(cozinha -> System.out.println(cozinha.getNome()));
     }
 
 }
