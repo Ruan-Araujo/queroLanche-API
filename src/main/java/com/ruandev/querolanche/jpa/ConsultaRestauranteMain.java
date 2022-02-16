@@ -22,7 +22,7 @@ public class ConsultaRestauranteMain {
 
         RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
 
-        List<Restaurante> todosRestaurantes = restauranteRepository.todos();
+        List<Restaurante> todosRestaurantes = restauranteRepository.listar();
 
         todosRestaurantes.forEach(restaurante ->
                 System.out.printf("%s - %f - %s\n", restaurante.getNome(),

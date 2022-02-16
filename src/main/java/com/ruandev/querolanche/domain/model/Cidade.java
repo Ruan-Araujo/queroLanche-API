@@ -4,24 +4,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Restaurante {
+public class Cidade {
 
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
-    @Column(name = "taxa_frete", nullable = false )//não aceita nulo
-    private BigDecimal taxaFrete;
-
-    //@JoinColumn(name = "cozinha_id") outra opção
     @ManyToOne
-    private Cozinha cozinha;
+    private Estado estado;
 }
