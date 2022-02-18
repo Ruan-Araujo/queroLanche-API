@@ -1,8 +1,11 @@
 package com.ruandev.querolanche.api.controller;
 
 import com.ruandev.querolanche.api.model.CozinhasXmlWrapper;
+import com.ruandev.querolanche.domain.exception.EntidadeEmUsoException;
+import com.ruandev.querolanche.domain.exception.EntidadeNaoEncontradaException;
 import com.ruandev.querolanche.domain.model.Cozinha;
 import com.ruandev.querolanche.domain.repository.CozinhaRepository;
+import com.ruandev.querolanche.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +23,9 @@ public class CozinhaController {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    @Autowired
+    private CadastroCozinhaService cadastroCozinha;
 
     @GetMapping
     public List<Cozinha> listar() {
@@ -46,7 +52,7 @@ public class CozinhaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-        return cozinhaRepository.salvar(cozinha);
+        return cadastroCozinha.salvar(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
@@ -58,7 +64,7 @@ public class CozinhaController {
 //			cozinhaAtual.setNome(cozinha.getNome());
             BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 
-            cozinhaAtual = cozinhaRepository.salvar(cozinhaAtual);
+            cozinhaAtual = cadastroCozinha.salvar(cozinhaAtual);
             return ResponseEntity.ok(cozinhaAtual);
         }
 
@@ -67,18 +73,13 @@ public class CozinhaController {
 
     @DeleteMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
-
         try {
-            Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-
-            if (cozinha != null) {
-                cozinhaRepository.remover(cozinha);
-
-                return ResponseEntity.noContent().build() ;
-            }
-
+            cadastroCozinha.excluir(cozinhaId);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
