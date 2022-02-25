@@ -1,6 +1,5 @@
 package com.ruandev.querolanche.api.controller;
 
-import com.ruandev.querolanche.api.model.CozinhasXmlWrapper;
 import com.ruandev.querolanche.domain.exception.EntidadeEmUsoException;
 import com.ruandev.querolanche.domain.exception.EntidadeNaoEncontradaException;
 import com.ruandev.querolanche.domain.model.Cozinha;
@@ -32,12 +31,6 @@ public class CozinhaController {
         return cozinhaRepository.listar();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    public CozinhasXmlWrapper listarXml() {
-        return new CozinhasXmlWrapper(cozinhaRepository.listar());
-    }
-
-    //@ResponseStatus(HttpStatus.OK)
     @GetMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
         Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
@@ -58,6 +51,7 @@ public class CozinhaController {
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId,
                                              @RequestBody Cozinha cozinha) {
+
         Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
 
         if (cozinhaAtual != null) {

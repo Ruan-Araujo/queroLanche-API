@@ -2,6 +2,7 @@ package com.ruandev.querolanche.infrastructure.repository;
 
 import com.ruandev.querolanche.domain.model.Restaurante;
 import com.ruandev.querolanche.domain.repository.RestauranteRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +38,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
 
     @Transactional
     @Override
-    public void remover(Restaurante restaurante) {
-        restaurante = buscar(restaurante.getId());
+    public void remover(Long restauranteId) {
+        Restaurante restaurante = buscar(restauranteId);
+
+        if (restaurante == null)
+            throw new EmptyResultDataAccessException(1);
+
         manager.remove(restaurante);
     }
 }
