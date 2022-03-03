@@ -16,12 +16,13 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
     @Column(name = "taxa_frete", nullable = false )//não aceita nulo
     private BigDecimal taxaFrete;
 
-    //@JoinColumn(name = "cozinha_id") outra opção
     @ManyToOne
+    @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 }

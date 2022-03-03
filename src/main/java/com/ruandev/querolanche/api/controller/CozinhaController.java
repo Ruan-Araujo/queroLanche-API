@@ -29,7 +29,6 @@ public class CozinhaController {
 
     @GetMapping
     public List<Cozinha> listar() {
-
         return cozinhaRepository.findAll();
     }
 
@@ -67,7 +66,7 @@ public class CozinhaController {
     }
 
     @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
+    public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
         try {
             cadastroCozinha.excluir(cozinhaId);
             return ResponseEntity.noContent().build();

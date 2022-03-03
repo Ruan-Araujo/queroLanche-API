@@ -22,7 +22,7 @@ public class EstadoController {
     private EstadoRepository estadoRepository;
 
     @Autowired
-    private CadastroEstadoService cadastroEstadoService;
+    private CadastroEstadoService cadastroEstado;
 
     @GetMapping
     public List<Estado> listar() {
@@ -42,41 +42,32 @@ public class EstadoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody Estado estado) {
-
-        try {
-            estado = cadastroEstadoService.salvar(estado);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(estado);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Estado> adicionar(@RequestBody Estado estado) {
+        estado = cadastroEstado.salvar(estado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(estado);
     }
 
     @PutMapping("/{estadoId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long estadoId,
+    public ResponseEntity<Estado> atualizar(@PathVariable Long estadoId,
                                        @RequestBody Estado estado) {
-        try {
-            Optional<Estado> estadoAtual = estadoRepository.findById(estadoId);
 
-            if (estadoAtual.isPresent()) {
+            Estado estadoAtual = estadoRepository.findById(estadoId)
+                    .orElse(null);
+
+            if (estadoAtual != null) {
                 BeanUtils.copyProperties(estado, estadoAtual, "id");
 
-                Estado estadoSalvo = cadastroEstadoService.salvar(estadoAtual.get());
+                estadoAtual = cadastroEstado.salvar(estadoAtual);
 
-                return ResponseEntity.ok(estadoSalvo);
+                return ResponseEntity.ok(estadoAtual);
             }
             return ResponseEntity.notFound().build();
-        }
-        catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @DeleteMapping("/{estadoId}")
-    public ResponseEntity<Estado> deletar(@PathVariable Long estadoId) {
+    public ResponseEntity<Estado> remover(@PathVariable Long estadoId) {
         try {
-            cadastroEstadoService.excluir(estadoId);
+            cadastroEstado.excluir(estadoId);
             return ResponseEntity.noContent().build();
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();

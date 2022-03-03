@@ -22,7 +22,7 @@ public class CidadeController {
     private CidadeRepository cidadeRepository;
 
     @Autowired
-    private CadastroCidadeService cidadeService;
+    private CadastroCidadeService cadastroCidade;
 
     @GetMapping
     public List<Cidade> listar() {
@@ -42,10 +42,10 @@ public class CidadeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody Cidade cidade) {
+    public ResponseEntity<?> adicionar(@RequestBody Cidade cidade) {
 
         try {
-            cidade = cidadeService.salvar(cidade);
+            cidade = cadastroCidade.salvar(cidade);
             return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
         }
         catch (EntidadeNaoEncontradaException e) {
@@ -58,14 +58,17 @@ public class CidadeController {
     public ResponseEntity<?> atualizar(@PathVariable Long cidadeId,
                                        @RequestBody Cidade cidade){
         try {
-            Optional<Cidade> cidadeAtual = cidadeRepository.findById(cidadeId);
+            // Podemos usar o orElse(null) também, que retorna a instância de cidade
+            // dentro do Optional, ou null, caso ele esteja vazio,
+            // mas nesse caso, temos a responsabilidade de tomar cuidado com NullPointerException
+            Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElse(null);
 
-            if (cidadeAtual.isPresent()) {
+            if (cidadeAtual != null) {
                 BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 
-                Cidade cidadeSalva = cidadeService.salvar(cidadeAtual.get());
+               cidadeAtual = cadastroCidade.salvar(cidadeAtual);
 
-                return ResponseEntity.ok(cidadeSalva);
+                return ResponseEntity.ok(cidadeAtual);
             }
             return ResponseEntity.notFound().build();
         }
@@ -77,7 +80,7 @@ public class CidadeController {
     @DeleteMapping("/{cidadeId}")
     public ResponseEntity<Cidade> deletar(@PathVariable Long cidadeId) {
         try {
-            cidadeService.excluir(cidadeId);
+            cadastroCidade.excluir(cidadeId);
             return ResponseEntity.noContent().build();
         }
         catch (EntidadeNaoEncontradaException e) {
