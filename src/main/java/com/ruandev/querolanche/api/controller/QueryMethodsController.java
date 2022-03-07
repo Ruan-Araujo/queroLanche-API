@@ -45,4 +45,24 @@ public class QueryMethodsController {
             (String nome, Long cozinha) {
         return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinha);
     }
+
+    @GetMapping("/restaurantes/primeiro-por-nome")
+    public Optional<Restaurante> primeiroRestaurantePorNome(String nome) {
+        return restauranteRepository.findFirstRestauranteByNomeContaining(nome);
+    }
+
+    @GetMapping("/restaurantes/top2-por-nome")
+    public List<Restaurante> restauranteTop2(String nome) {
+        return restauranteRepository.findTop2ByNomeContaining(nome);
+    }
+
+    @GetMapping("/cozinhas/cozinhaExists")
+    public boolean cozinhaExits(String nome) {
+        return cozinhaRepository.existsByNome(nome);
+    }
+
+    @GetMapping("/cozinhas/count-por-cozinha")
+    public int countPorCozinha(Long cozinhaId) {
+        return restauranteRepository.countByCozinhaId(cozinhaId);
+    }
 }
