@@ -41,9 +41,8 @@ public class QueryMethodsController {
     }
 
     @GetMapping("/restaurantes/por-nome")
-    public List<Restaurante> restaurantePorNomeEId
-            (String nome, Long cozinha) {
-        return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinha);
+    public List<Restaurante> restaurantePorNomeEId(String nome, Long cozinhaId) {
+        return restauranteRepository.consultarPorNome(nome, cozinhaId);
     }
 
     @GetMapping("/restaurantes/primeiro-por-nome")
