@@ -77,6 +77,6 @@ public class QueryMethodsController {
     public List<Restaurante> restauranteComFreteGratis(String nome) {
         // Padrão de projeto Specification do DDD
         // Utilizando classe fábrica de specs
-        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+        return restauranteRepository.findComFreteGratis(nome);
     }
 }

@@ -1,8 +1,11 @@
 package com.ruandev.querolanche.infrastucture.repository;
 
 import com.ruandev.querolanche.domain.model.Restaurante;
+import com.ruandev.querolanche.domain.repository.RestauranteRepository;
 import com.ruandev.querolanche.domain.repository.RestauranteRepositoryQueries;
 import lombok.var;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -15,8 +18,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import static com.ruandev.querolanche.infrastucture.repository.spec.RestauranteSpecs.comFreteGratis;
+import static com.ruandev.querolanche.infrastucture.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
@@ -24,6 +29,17 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     @PersistenceContext
     private EntityManager manager;
+
+    //Corrige a exceção de dependência circular
+    //Quando a gente nao coloca o lazy, quando a classe impl é
+    // instanciada pelo container do spring ela ve as dependencias que precisa
+    // e instancia as dependencias
+    //Mas como a dependência é um restaurante repository e um repository vai instanciar um impl
+    // Ai fica na dependência circular
+    // Quando colocamos lazy estamos dizendo só instancia essa
+    // dependência no momento que for preciso
+    @Autowired @Lazy
+    private RestauranteRepository restauranteRepository;
 
     @Override
     public List<Restaurante> consultar(String nome, BigDecimal taxaFreteInicial,
@@ -68,5 +84,10 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
                                 manager.createQuery(criteriaQuery);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Restaurante> findComFreteGratis(String nome) {
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 }
