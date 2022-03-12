@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,17 +43,25 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         // representa que a raiz do from é o objeto Restaurante
         Root<Restaurante> root = criteriaQuery.from(Restaurante.class);
 
-        //Criando instancia de Predicate
-        Predicate nomePredicate = builder
-                                    .like(root.get("nome"), "%" + nome + "%");
-        Predicate taxaInicialPredicate =
-                builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial);
+        // Lógica para tornar a consulta dinâmica utilizando lista
+        var predicates = new ArrayList<Predicate>();
 
-        Predicate taxaFinalPredicate =
-                builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal);
+        //Devemos verificar as váriveis que iremos receber como parametros
+        // e então adicionar as instancias de Predicate na lista.
+        if (StringUtils.hasText(nome)) {
+            predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
+        }
+
+        if (taxaFreteInicial != null) {
+            predicates.add(builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
+        }
+
+        if (taxaFreteFinal != null) {
+            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
+        }
 
         // Essa consulta busca por nome
-        criteriaQuery.where(nomePredicate, taxaInicialPredicate, taxaFinalPredicate);
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
         // Passando um criteriaQuery retorna um TypedQuery
         TypedQuery<Restaurante> query =
