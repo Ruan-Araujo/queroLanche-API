@@ -79,4 +79,9 @@ public class QueryMethodsController {
         // Utilizando classe fábrica de specs
         return restauranteRepository.findComFreteGratis(nome);
     }
+
+    @GetMapping("/restaurantes/primeiro")
+    public Optional<Restaurante> restaurantePrimeiro(String nome) {
+        return restauranteRepository.buscarPrimeiro();
+    }
 }
