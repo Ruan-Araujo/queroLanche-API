@@ -4,6 +4,7 @@ import com.ruandev.querolanche.domain.model.Cozinha;
 import com.ruandev.querolanche.domain.model.Restaurante;
 import com.ruandev.querolanche.domain.repository.CozinhaRepository;
 import com.ruandev.querolanche.domain.repository.RestauranteRepository;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,5 +71,15 @@ public class QueryMethodsController {
                                                       BigDecimal taxaFreteInicial,
                                                       BigDecimal taxaFreteFinal) {
         return restauranteRepository.consultar(nome, taxaFreteInicial, taxaFreteFinal);
+    }
+
+    @GetMapping("/restaurantes/com-frete-gratis")
+    public List<Restaurante> restauranteComFreteGratis(String nome) {
+
+        // Padrão de projeto Specification do DDD
+        var comFreteGratis = new RestauranteComFresteGratisSpec();
+        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec();
+
+        return restauranteRepository.findAll(comFreteGratis.and(comNomeSemelhante));
     }
 }
