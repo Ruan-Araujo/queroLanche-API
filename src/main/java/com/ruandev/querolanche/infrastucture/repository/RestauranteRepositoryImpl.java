@@ -1,4 +1,4 @@
-package com.ruandev.querolanche.infra.repository;
+package com.ruandev.querolanche.infrastucture.repository;
 
 import com.ruandev.querolanche.domain.model.Restaurante;
 import com.ruandev.querolanche.domain.repository.RestauranteRepositoryQueries;

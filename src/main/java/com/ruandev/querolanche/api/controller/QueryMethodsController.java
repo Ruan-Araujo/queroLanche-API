@@ -4,6 +4,8 @@ import com.ruandev.querolanche.domain.model.Cozinha;
 import com.ruandev.querolanche.domain.model.Restaurante;
 import com.ruandev.querolanche.domain.repository.CozinhaRepository;
 import com.ruandev.querolanche.domain.repository.RestauranteRepository;
+import com.ruandev.querolanche.infrastucture.repository.spec.RestauranteComFresteGratisSpec;
+import com.ruandev.querolanche.infrastucture.repository.spec.RestauranteComNomeSemelhanteSpec;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,7 +80,7 @@ public class QueryMethodsController {
 
         // Padrão de projeto Specification do DDD
         var comFreteGratis = new RestauranteComFresteGratisSpec();
-        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec();
+        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
 
         return restauranteRepository.findAll(comFreteGratis.and(comNomeSemelhante));
     }
