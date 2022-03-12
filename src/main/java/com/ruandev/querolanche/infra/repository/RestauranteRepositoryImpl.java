@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +39,20 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
                                                     .createQuery(Restaurante.class);
 
         // "from Restaurante - jpql"
-        criteriaQuery.from(Restaurante.class);
+        // representa que a raiz do from é o objeto Restaurante
+        Root<Restaurante> root = criteriaQuery.from(Restaurante.class);
+
+        //Criando instancia de Predicate
+        Predicate nomePredicate = builder
+                                    .like(root.get("nome"), "%" + nome + "%");
+        Predicate taxaInicialPredicate =
+                builder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial);
+
+        Predicate taxaFinalPredicate =
+                builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal);
+
+        // Essa consulta busca por nome
+        criteriaQuery.where(nomePredicate, taxaInicialPredicate, taxaFinalPredicate);
 
         // Passando um criteriaQuery retorna um TypedQuery
         TypedQuery<Restaurante> query =
