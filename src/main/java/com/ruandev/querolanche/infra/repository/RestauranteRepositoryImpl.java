@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -24,30 +26,22 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     public List<Restaurante> consultar(String nome, BigDecimal taxaFreteInicial,
                                   BigDecimal taxaFreteFinal ) {
 
-        var jpql = new StringBuilder();
-        jpql.append("from Restaurante where 0 = 0 ");
+        // FUnciona como uma fábrica para construir elementos
+        // que precisamos para fazer consultas como os
+        // criterios da consulta e a própria criteria query
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
 
-        var parametros = new HashMap<String, Object>();
+        // Retorna uma instância de uma criteriaquery de restaurante
+        // O criteria query é um construtor de cláusulas
+        CriteriaQuery<Restaurante> criteriaQuery = builder
+                                                    .createQuery(Restaurante.class);
 
-        if (StringUtils.hasLength(nome)) {
-            jpql.append("and nome like :nome ");
-            parametros.put("nome", "%" + nome + "%");
-        }
+        // "from Restaurante - jpql"
+        criteriaQuery.from(Restaurante.class);
 
-        if (taxaFreteInicial != null) {
-            jpql.append("and taxaFrete >= :taxaInicial ");
-            parametros.put("taxaInicial", taxaFreteInicial);
-        }
-
-        if (taxaFreteFinal != null) {
-            jpql.append("and taxaFrete <= :taxaFinal ");
-            parametros.put("taxaFinal", taxaFreteFinal);
-        }
-
-        TypedQuery<Restaurante> query= manager
-                    .createQuery(jpql.toString(), Restaurante.class);
-
-        parametros.forEach((chave, valor) -> query.setParameter(chave, valor));
+        // Passando um criteriaQuery retorna um TypedQuery
+        TypedQuery<Restaurante> query =
+                                manager.createQuery(criteriaQuery);
 
         return query.getResultList();
     }
