@@ -34,11 +34,9 @@ public class CidadeController {
 
         Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
 
-        if (cidade.isPresent()) {
-            return ResponseEntity.ok(cidade.get());
-        }
+        return cidade.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping

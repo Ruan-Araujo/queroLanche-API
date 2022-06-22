@@ -4,7 +4,7 @@ import com.ruandev.querolanche.domain.model.Cozinha;
 import com.ruandev.querolanche.domain.model.Restaurante;
 import com.ruandev.querolanche.domain.repository.CozinhaRepository;
 import com.ruandev.querolanche.domain.repository.RestauranteRepository;
-import static com.ruandev.querolanche.infrastucture.repository.spec.RestauranteSpecs.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
